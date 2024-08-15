@@ -4,36 +4,13 @@ import { useState, useEffect } from "react";
 import Table from "@/app/components/Table";
 
 interface Digimon {
+  id: number; // Assuming you've added an 'id' field to each Digimon object
   name: string;
   img: string;
   level: string;
 }
 
 export default function Dialog({ value }: Readonly<{ value: Digimon[] }>) {
-  const [filteredDigimon, setFilteredDigimon] = useState<Digimon[]>(value);
-
-  useEffect(() => {
-    const searchDigimon = document.getElementById(
-      "digimon_list"
-    ) as HTMLDialogElement;
-    const handleClose = () => {
-      searchDigimon.close();
-    };
-    searchDigimon.addEventListener("close", handleClose);
-
-    return () => {
-      searchDigimon.removeEventListener("close", handleClose);
-    };
-  }, []);
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const filtered = value.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm)
-    );
-    setFilteredDigimon(filtered);
-  };
-
   return (
     <>
       <button
@@ -51,17 +28,10 @@ export default function Dialog({ value }: Readonly<{ value: Digimon[] }>) {
       </button>
       <dialog id="digimon_list" className="modal">
         <div className="modal-box max-w-xl">
-          <div className="flex justify-between">
-            <h3 className="font-bold text-lg text-[#f59e0b]">Digimon</h3>
-            <input
-              type="text"
-              placeholder="Search..."
-              className="input w-1/2 input-sm text-end"
-              onChange={handleSearch}
-            />
-          </div>
+          <h3 className="font-bold text-lg text-[#f59e0b]">Digimon</h3>
+
           <div className="divider divider-warning">List</div>
-          <Table value={filteredDigimon} />
+          <Table value={value} />
           <div className="modal-action">
             <form method="dialog">
               <button className="btn btn-error">Close</button>

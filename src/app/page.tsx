@@ -9,6 +9,7 @@ import Card from "@/app/components/Card";
 import Dialog from "@/app/components/Dialog";
 
 interface Digimon {
+  id: number; // Assuming you've added an 'id' field to each Digimon object
   name: string;
   img: string;
   level: string;
@@ -27,7 +28,16 @@ export default function Home() {
 
     axios
       .get("https://digimon-api.vercel.app/api/digimon")
-      .then((res) => setDigimon(res.data))
+      .then((res) => {
+        // Map through the data and add a unique id to each Digimon object
+        const digimonWithId = res.data.map(
+          (digimon: Digimon, index: number) => ({
+            ...digimon,
+            id: index + 1, // Assign a unique id (starting from 1)
+          })
+        );
+        setDigimon(digimonWithId);
+      })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, []);
